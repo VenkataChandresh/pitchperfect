@@ -32,4 +32,4 @@ PitchPerfect is an interview practice app where users answer questions out loud,
 
 ---
 
-👨‍💻 Built by [Your Name](https://github.com/your-username)
+👨‍💻 Built by [Your Name](https://github.com/VenkataChandresh)
