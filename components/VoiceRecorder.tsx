@@ -10,9 +10,6 @@ export default function VoiceRecorder() {
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  {
-    /* all these are tester words */
-  }
   const fillerWords = [
     "um",
     "uh",
@@ -89,81 +86,106 @@ export default function VoiceRecorder() {
 
   const analysis = analyzeSpeech(transcriptedSpeech, elapsedSec);
 
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const secs = (seconds % 60).toString().padStart(2, "0");
+    return `${mins}:${secs}`;
+  };
+
   return (
-    <div>
+    <div className="relative bg-black/40 backdrop-blur-md border border-[#1f2937] rounded-2xl shadow-[0_0_20px_rgba(0,198,255,0.15)] p-6">
+      {/* Title */}
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="text-[#00c6ff] font-semibold text-lg tracking-wide">
+          Speech Analyzer
+        </h2>
+        <span
+          className={`text-sm font-medium ${
+            isRecording ? "text-[#22c55e]" : "text-gray-400"
+          }`}
+        >
+          {isRecording ? "● Recording" : "Idle"}
+        </span>
+      </div>
+
+      {/* Timer */}
+      <div className="flex items-center justify-between bg-[#0f0f0f]/80 rounded-xl px-4 py-2 mb-6 border border-[#1f2937]">
+        <span className="text-gray-400 text-sm">Timer</span>
+        <span className="text-[#00c6ff] font-mono text-lg tracking-widest">
+          {formatTime(elapsedSec)}
+        </span>
+      </div>
+
+      {/* Controls */}
       <div className="flex gap-4 mb-6 justify-center">
         <button
           onClick={startRecording}
           disabled={isRecording}
-          className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-50 transition font-medium"
+          className="flex-1 px-5 py-2 rounded-xl bg-[#00c6ff]/20 text-[#00c6ff] font-semibold border border-[#00c6ff] hover:bg-[#00c6ff]/30 hover:shadow-[0_0_15px_rgba(0,198,255,0.4)] disabled:opacity-40 transition-all"
         >
-          🎙️ Start
+          🎙 Start
         </button>
         <button
           onClick={stopRecording}
           disabled={!isRecording}
-          className="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 disabled:opacity-50 transition font-medium"
+          className="flex-1 px-5 py-2 rounded-xl bg-[#ef4444]/20 text-[#ef4444] font-semibold border border-[#ef4444] hover:bg-[#ef4444]/30 hover:shadow-[0_0_15px_rgba(239,68,68,0.5)] disabled:opacity-40 transition-all"
         >
-          ⏹️ Stop
+          ⏹ Stop
         </button>
         <button
           onClick={clearTranscript}
-          className="px-5 py-2 rounded-lg bg-gray-600 hover:bg-gray-700 text-gray-200 transition font-medium"
+          className="flex-1 px-5 py-2 rounded-xl bg-transparent text-gray-300 border border-[#1f2937] hover:bg-[#1f2937]/40 hover:shadow-[0_0_10px_rgba(255,255,255,0.1)] transition-all"
         >
           🧹 Clear
         </button>
       </div>
 
-      <p className="text-center text-lg mb-4 flex items-center justify-center gap-2">
-        Recording:{" "}
-        <span
-          className={
-            isRecording
-              ? "text-green-400 font-semibold"
-              : "text-red-400 font-semibold"
-          }
-        >
-          {isRecording ? "Yes" : "No"}
-        </span>
-        {isRecording && (
-          <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
+      {/* Transcript */}
+      <div className="mt-2 p-4 bg-black/30 rounded-xl min-h-[120px] text-sm leading-relaxed overflow-y-auto border border-[#1f2937]">
+        {transcriptedSpeech ? (
+          transcriptedSpeech
+            .trim()
+            .split(/\s+/)
+            .map((word, index) => (
+              <span
+                key={index}
+                className={
+                  fillerWords.includes(word.toLowerCase())
+                    ? "text-[#00c6ff] font-semibold"
+                    : "text-gray-200"
+                }
+              >
+                {word}{" "}
+              </span>
+            ))
+        ) : (
+          <span className="text-gray-500">
+            Your transcript will appear here...
+          </span>
         )}
-      </p>
-
-      <div className="mt-4 p-4 bg-[#1e1e1e] rounded-lg min-h-[120px] text-sm leading-relaxed overflow-y-auto border border-gray-700">
-        {transcriptedSpeech
-          ? transcriptedSpeech
-              .trim()
-              .split(/\s+/)
-              .map((word, index) => (
-                <span
-                  key={index}
-                  className={
-                    fillerWords.includes(word.toLowerCase())
-                      ? "text-red-400 font-semibold"
-                      : ""
-                  }
-                >
-                  {word}{" "}
-                </span>
-              ))
-          : "🎧 Your transcript will appear here..."}
       </div>
 
+      {/* Stats */}
       <div className="mt-6 grid grid-cols-3 gap-4">
-        <div className="bg-[#1e1e1e] p-4 rounded-lg shadow text-center border border-gray-700">
-          <p className="text-gray-400">Words</p>
-          <p className="text-2xl font-bold text-gray-100">
+        <div className="bg-black/30 p-4 rounded-xl text-center border border-[#1f2937]">
+          <p className="text-gray-500 text-sm">Words</p>
+          <p className="text-2xl font-semibold text-gray-100">
             {analysis.wordCount}
           </p>
         </div>
-        <div className="bg-[#1e1e1e] p-4 rounded-lg shadow text-center border border-gray-700">
-          <p className="text-gray-400">Fillers</p>
-          <p className="text-2xl font-bold text-red-400">{analysis.fillers}</p>
+        <div className="bg-black/30 p-4 rounded-xl text-center border border-[#1f2937]">
+          <p className="text-gray-500 text-sm">Fillers</p>
+          <p className="text-2xl font-semibold text-[#00c6ff]">
+            {analysis.fillers}
+          </p>
         </div>
-        <div className="bg-[#1e1e1e] p-4 rounded-lg shadow text-center border border-gray-700">
-          <p className="text-gray-400">WPM</p>
-          <p className="text-2xl font-bold text-blue-400">{analysis.wpm}</p>
+        <div className="bg-black/30 p-4 rounded-xl text-center border border-[#1f2937]">
+          <p className="text-gray-500 text-sm">WPM</p>
+          <p className="text-2xl font-semibold text-[#00c6ff]">
+            {analysis.wpm}
+          </p>
         </div>
       </div>
     </div>

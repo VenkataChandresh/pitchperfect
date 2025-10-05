@@ -21,33 +21,38 @@ export default function Home() {
 
   return (
     <main
-      className={`min-h-screen bg-gradient-to-br from-[#0f172a] to-[#1e293b] text-gray-200 flex flex-col p-8 ${inter.className}`}
+      className={`min-h-screen bg-gradient-to-br from-[#000000] to-[#0a0f1a] text-gray-200 flex flex-col p-8 ${inter.className}`}
     >
+      {/* Header */}
       <header className="mb-10 text-center">
-        <h1 className="text-5xl font-extrabold tracking-tight text-blue-400 drop-shadow-md">
-          🎤 PitchPerfect
+        <h1 className="text-5xl font-extrabold tracking-tight text-white">
+          PitchPerfect
         </h1>
         <p className="mt-3 text-gray-400 text-lg">
-          Practice interviews with AI-powered feedback
+          Practice interviews with real-time speech analysis
         </p>
       </header>
 
-      <section className="flex flex-col lg:flex-row w-full max-w-6xl mx-auto gap-8">
-        <div className="flex-1 flex flex-col justify-center">
-          <div className="bg-[#242424] shadow-lg rounded-xl p-6 border border-gray-700 flex flex-col h-full">
+      {/* Main Section */}
+      <section className="flex flex-col lg:flex-row w-full max-w-6xl mx-auto gap-8 items-stretch">
+        {/* Flashcard Panel */}
+        <div className="flex-1 flex flex-col justify-between">
+          <div className="flex flex-col h-full bg-black/40 backdrop-blur-md rounded-2xl border border-[#1f2937] p-6 shadow-[0_0_20px_rgba(0,198,255,0.15)]">
             <div className="flex-1">
               <FlashCard question={questions[currentIndex]} />
             </div>
-            <div className="flex justify-between mt-6">
+
+            {/* Buttons */}
+            <div className="mt-6 mb-10 flex justify-between">
               <button
                 onClick={prevQuestion}
-                className="px-5 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 text-gray-200 font-medium shadow-sm"
+                className="px-5 py-2 rounded-lg bg-white hover:bg-gray-200 text-black font-medium transition-all shadow-[0_0_10px_rgba(255,255,255,0.15)]"
               >
                 ⬅ Prev
               </button>
               <button
                 onClick={nextQuestion}
-                className="px-5 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-md"
+                className="px-5 py-2 rounded-lg bg-white hover:bg-gray-200 text-black font-medium transition-all shadow-[0_0_10px_rgba(255,255,255,0.15)]"
               >
                 Next ➡
               </button>
@@ -55,17 +60,20 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hidden lg:block w-px bg-gray-700"></div>
+        {/* Divider */}
+        <div className="hidden lg:block w-px bg-[#1f2937]"></div>
 
+        {/* Voice Recorder Panel */}
         <div className="flex-1 flex flex-col justify-center">
-          <div className="bg-[#242424] shadow-lg rounded-xl p-6 border border-gray-700 h-full">
+          <div className="bg-black/40 backdrop-blur-md rounded-2xl border border-[#1f2937] p-6 shadow-[0_0_20px_rgba(0,198,255,0.15)] h-full">
             <VoiceRecorder key={currentIndex} />
           </div>
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="mt-12 text-gray-500 text-sm text-center">
-        Built with ❤️ using Next.js, TypeScript, Tailwind, and Web Speech API
+        © 2025 PitchPerfect — Built with Next.js, TailwindCSS
       </footer>
     </main>
   );
