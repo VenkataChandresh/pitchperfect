@@ -72,8 +72,11 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="mt-12 text-gray-500 text-sm text-center">
-        © 2025 PitchPerfect — Built with Next.js, TailwindCSS
+      <footer className="mt-12 text-center text-gray-400 text-sm border-t border-gray-800 pt-6">
+        © {new Date().getFullYear()} PitchPerfect — Designed & Developed by{" "}
+        <span className="text-blue-400 font-semibold">
+          Venkata Chandresh Adapa
+        </span>
       </footer>
     </main>
   );
